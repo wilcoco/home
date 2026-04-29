@@ -1,0 +1,13 @@
+{
+  "name": "cams-korea-website",
+  "version": "1.0.0",
+  "description": "㈜캠스 - Creative Automotive Module System website",
+  "private": true,
+  "scripts": {
+    "start": "npx --yes serve -s . -l ${PORT:-3000} --no-clipboard",
+    "dev": "npx --yes serve -s . -l 3000 --no-clipboard"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
