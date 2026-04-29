@@ -4,8 +4,8 @@
   "description": "㈜캠스 - Creative Automotive Module System website",
   "private": true,
   "scripts": {
-    "start": "npx --yes serve -s . -l ${PORT:-3000} --no-clipboard",
-    "dev": "npx --yes serve -s . -l 3000 --no-clipboard"
+    "start": "npx --yes serve@14 . -l tcp://0.0.0.0:${PORT:-3000} --no-clipboard --config serve.json",
+    "dev": "npx --yes serve@14 . -l 3000 --no-clipboard --config serve.json"
   },
   "engines": {
     "node": ">=18"
