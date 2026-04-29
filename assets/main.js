@@ -15,7 +15,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     navLinks.querySelectorAll('a').forEach(a => {
       a.addEventListener('click', () => {
-        // Close menu only when navigating in mobile
         if (window.innerWidth <= 768 && !a.parentElement.classList.contains('has-submenu')) {
           menuToggle.classList.remove('active');
           navLinks.classList.remove('active');
@@ -26,17 +25,17 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Header scroll effect
-  const header = document.querySelector('.header');
+  const header = document.getElementById('header');
   if (header) {
-    window.addEventListener('scroll', () => {
-      if (window.pageYOffset > 50) {
-        header.style.background = 'rgba(10, 14, 20, 0.95)';
-        header.style.boxShadow = '0 4px 20px rgba(0,0,0,0.3)';
+    const onScroll = () => {
+      if (window.pageYOffset > 30) {
+        header.classList.add('scrolled');
       } else {
-        header.style.background = 'rgba(10, 14, 20, 0.85)';
-        header.style.boxShadow = 'none';
+        header.classList.remove('scrolled');
       }
-    });
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
   }
 
   // Reveal on scroll
@@ -47,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
         observer.unobserve(entry.target);
       }
     });
-  }, { threshold: 0.1, rootMargin: '0px 0px -80px 0px' });
+  }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
 
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
@@ -65,13 +64,17 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Mark active nav
-  const path = window.location.pathname.split('/').pop() || 'index.html';
+  // Mark active nav based on current path
+  // Path examples: "/", "/products", "/products.html"
+  let path = window.location.pathname.replace(/\/$/, '').replace(/\.html$/, '');
+  const slug = path === '' ? 'home' : path.replace(/^\//, '');
   document.querySelectorAll('.nav-links a[data-page]').forEach(a => {
-    if (a.dataset.page === path.replace('.html', '') ||
-        (path === 'index.html' && a.dataset.page === 'home') ||
-        (path === '' && a.dataset.page === 'home')) {
+    if (a.dataset.page === slug) {
       a.classList.add('active');
+    }
+    // ESG sub-pages should also activate the ESG menu
+    if (slug === 'environment' || slug === 'social' || slug === 'governance') {
+      if (a.dataset.page === 'esg') a.classList.add('active');
     }
   });
 });
