@@ -742,6 +742,104 @@ section { padding: 80px 0; }
   .num-section.full-width { padding: 36px 0; }
 }
 
+/* Grouped tables (complex headers, sub-totals, intensity rows) */
+.data-table-grouped {
+  table-layout: auto;
+  font-size: 0.83rem;
+}
+.data-table-grouped th,
+.data-table-grouped td {
+  padding: 9px 12px;
+}
+.data-table-grouped thead th {
+  font-size: 0.7rem;
+  text-align: center;
+}
+.data-table-grouped thead th.num {
+  text-align: right;
+}
+.data-table-grouped thead th.group-head {
+  background: var(--accent-dim);
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-bottom: 1px solid var(--accent);
+}
+.data-table-grouped tbody tr.group-start td {
+  border-top: 2px solid var(--line-soft);
+}
+.data-table-grouped tbody tr.row-subtotal td {
+  background: var(--bg-soft);
+  font-weight: 600;
+}
+.data-table-grouped tbody tr.row-intensity td {
+  background: #fef5f6;
+  border-bottom: 1px dashed var(--line-soft);
+}
+.data-table-grouped tbody tr.row-intensity:hover td {
+  background: #fff0f2;
+}
+.data-table-grouped tbody tr.row-total td {
+  background: var(--accent-dim);
+  font-size: 0.92rem;
+}
+.data-table-grouped tbody tr.row-total:hover td {
+  background: rgba(196, 30, 58, 0.16);
+}
+.data-table-grouped tbody tr.row-highlight td {
+  background: var(--accent);
+  color: white;
+}
+.data-table-grouped tbody tr.row-highlight:hover td {
+  background: var(--accent-soft);
+}
+.data-table-grouped tbody tr.row-highlight .num.accent {
+  color: white !important;
+}
+.data-table-grouped .row-group {
+  background: var(--bg-muted);
+  font-weight: 700;
+  color: var(--text);
+  text-align: center;
+  font-size: 0.85rem;
+  border-right: 2px solid var(--line-soft);
+  vertical-align: middle;
+}
+.data-table-grouped .row-subgroup {
+  background: var(--bg-soft);
+  text-align: center;
+  font-weight: 600;
+  color: var(--text-secondary);
+  border-right: 1px solid var(--line);
+  vertical-align: middle;
+  font-size: 0.82rem;
+}
+.data-table-grouped .row-subgroup em {
+  font-style: normal;
+}
+.data-table-grouped .accent-text {
+  color: var(--accent);
+}
+.data-table-grouped .num.up { color: #1a7f3c; font-weight: 700; }
+.data-table-grouped .num.down { color: #1971c2; font-weight: 700; }
+
+/* Universal up/down for any table */
+.data-table .num.up { color: #1a7f3c; font-weight: 700; }
+.data-table .num.down { color: #1971c2; font-weight: 700; }
+
+@media (max-width: 768px) {
+  .data-table-grouped {
+    font-size: 0.74rem;
+  }
+  .data-table-grouped th,
+  .data-table-grouped td {
+    padding: 7px 8px;
+  }
+  .data-table-grouped thead th {
+    font-size: 0.62rem;
+  }
+}
+
 /* ========== INLINE ICON (paragraph float) ========== */
 .lead-with-icon {
   margin: 0 0 18px;
