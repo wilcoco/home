@@ -158,16 +158,24 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 
 .menu-toggle {
   display: none;
-  width: 40px; height: 40px;
+  width: 44px; height: 44px;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 5px;
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  z-index: 102;
+  position: relative;
 }
 .menu-toggle span {
-  width: 22px; height: 2px;
+  width: 24px; height: 2px;
   background: var(--text);
   transition: all 0.3s;
+  display: block;
+  border-radius: 2px;
 }
 .menu-toggle.active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
 .menu-toggle.active span:nth-child(2) { opacity: 0; }
@@ -2234,6 +2242,7 @@ section { padding: 80px 0; }
     position: fixed;
     top: 76px; left: 0; right: 0;
     bottom: 0;
+    z-index: 99;
     flex-direction: column;
     background: var(--bg);
     padding: 20px;
