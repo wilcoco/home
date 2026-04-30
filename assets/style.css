@@ -1845,6 +1845,73 @@ section { padding: 80px 0; }
   }
 }
 
+/* ========== BRAND GUIDE ========== */
+.brand-guide-section {
+  padding: 80px 0;
+  background: linear-gradient(180deg, #ffffff 0%, #f5f7fb 100%);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+.brand-guide-frame {
+  margin-top: 40px;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: 0 14px 50px rgba(11, 46, 111, 0.12),
+              0 4px 14px rgba(0, 0, 0, 0.05);
+  background: #ffffff;
+  border: 1px solid var(--line);
+  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1),
+              box-shadow 0.4s;
+  position: relative;
+}
+.brand-guide-frame:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 22px 70px rgba(11, 46, 111, 0.18),
+              0 8px 22px rgba(0, 0, 0, 0.08);
+}
+.brand-guide-frame a {
+  display: block;
+  cursor: zoom-in;
+}
+.brand-guide-frame img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.brand-guide-frame::after {
+  content: '🔍 클릭하여 크게 보기';
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  padding: 7px 14px;
+  background: rgba(255, 255, 255, 0.95);
+  color: var(--text);
+  font-size: 0.78rem;
+  font-weight: 600;
+  border-radius: 20px;
+  border: 1px solid var(--line);
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.3s, transform 0.3s;
+  backdrop-filter: blur(6px);
+}
+.brand-guide-frame:hover::after {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (max-width: 768px) {
+  .brand-guide-section { padding: 50px 0; }
+  .brand-guide-frame { margin-top: 24px; }
+  .brand-guide-frame::after {
+    font-size: 0.68rem;
+    padding: 5px 10px;
+    bottom: 10px;
+    right: 10px;
+  }
+}
+
 /* ========== VIDEO SECTION ========== */
 .video-section {
   padding: 80px 0;
