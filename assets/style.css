@@ -746,14 +746,20 @@ section { padding: 80px 0; }
 .data-table-grouped {
   table-layout: auto;
   font-size: 0.83rem;
+  /* Force horizontal scroll on narrow screens instead of squishing */
+  min-width: 720px;
 }
 .data-table-grouped th,
 .data-table-grouped td {
   padding: 9px 12px;
+  /* Allow long Korean labels to wrap inside cells */
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
 .data-table-grouped thead th {
   font-size: 0.7rem;
   text-align: center;
+  white-space: nowrap;
 }
 .data-table-grouped thead th.num {
   text-align: right;
@@ -804,6 +810,8 @@ section { padding: 80px 0; }
   font-size: 0.85rem;
   border-right: 2px solid var(--line-soft);
   vertical-align: middle;
+  white-space: nowrap;
+  width: 80px;
 }
 .data-table-grouped .row-subgroup {
   background: var(--bg-soft);
@@ -813,6 +821,8 @@ section { padding: 80px 0; }
   border-right: 1px solid var(--line);
   vertical-align: middle;
   font-size: 0.82rem;
+  white-space: nowrap;
+  width: 60px;
 }
 .data-table-grouped .row-subgroup em {
   font-style: normal;
@@ -827,9 +837,37 @@ section { padding: 80px 0; }
 .data-table .num.up { color: #1a7f3c; font-weight: 700; }
 .data-table .num.down { color: #1971c2; font-weight: 700; }
 
+/* Visual hint that table is horizontally scrollable on narrow screens */
+.table-scroll {
+  position: relative;
+}
+.table-scroll::after {
+  content: '';
+  position: absolute;
+  top: 0; right: 0; bottom: 0;
+  width: 24px;
+  background: linear-gradient(to right, transparent, rgba(255,255,255,0.95));
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+@media (max-width: 768px) {
+  .table-scroll::after { opacity: 1; }
+  .table-scroll {
+    /* Subtle shadow on edges to hint scroll */
+    background:
+      linear-gradient(to right, white 30%, rgba(255,255,255,0)) 0 0/40px 100% no-repeat,
+      linear-gradient(to right, rgba(255,255,255,0), white 70%) 100% 0/40px 100% no-repeat,
+      radial-gradient(farthest-side at 0 50%, rgba(0,0,0,0.08), rgba(0,0,0,0)) 0 0/14px 100% no-repeat,
+      radial-gradient(farthest-side at 100% 50%, rgba(0,0,0,0.08), rgba(0,0,0,0)) 100% 0/14px 100% no-repeat;
+    background-attachment: local, local, scroll, scroll;
+  }
+}
+
 @media (max-width: 768px) {
   .data-table-grouped {
     font-size: 0.74rem;
+    min-width: 680px;
   }
   .data-table-grouped th,
   .data-table-grouped td {
@@ -838,6 +876,8 @@ section { padding: 80px 0; }
   .data-table-grouped thead th {
     font-size: 0.62rem;
   }
+  .data-table-grouped .row-group { width: 64px; font-size: 0.72rem; }
+  .data-table-grouped .row-subgroup { width: 48px; font-size: 0.7rem; }
 }
 
 /* ========== INLINE ICON (paragraph float) ========== */
