@@ -9,9 +9,9 @@
   --surface: #ffffff;
   --line: #e5e7eb;
   --line-soft: #d1d5db;
-  --text: #1a1d24;
-  --text-secondary: #3a4150;
-  --text-muted: #5e6772;
+  --text: #0f1218;
+  --text-secondary: #1f2530;
+  --text-muted: #3d4452;
   --text-dim: #8b94a3;
   --accent: #c41e3a;
   --accent-soft: #e0344f;
@@ -756,6 +756,61 @@ section { padding: 80px 0; }
 .image-block.borderless {
   border: none;
   background: transparent;
+}
+
+/* Governance table images - render extra large for legibility */
+.image-block.governance-table-img {
+  max-width: none;          /* override .large constraint */
+  width: 100%;
+  margin: 16px 0 24px;
+  background: #ffffff;
+  padding: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  position: relative;
+  cursor: zoom-in;
+  transition: box-shadow 0.25s, transform 0.25s;
+}
+.image-block.governance-table-img a {
+  display: block;
+  cursor: zoom-in;
+}
+.image-block.governance-table-img img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 4px;
+  /* Subtle filter to make light gray text appear darker */
+  filter: contrast(1.15) saturate(1.1) brightness(0.97);
+  transition: filter 0.25s;
+}
+.image-block.governance-table-img:hover {
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.12);
+}
+.image-block.governance-table-img:hover img {
+  filter: contrast(1.2) saturate(1.15) brightness(0.96);
+}
+/* Subtle "click to zoom" indicator */
+.image-block.governance-table-img::after {
+  content: '🔍 클릭하여 크게 보기';
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  padding: 6px 12px;
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--text);
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 20px;
+  border: 1px solid var(--line);
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.25s, transform 0.25s;
+  backdrop-filter: blur(4px);
+}
+.image-block.governance-table-img:hover::after {
+  opacity: 1;
+  transform: translateY(0);
 }
 .image-grid-2 {
   display: grid;
