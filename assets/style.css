@@ -1444,18 +1444,31 @@ section { padding: 80px 0; }
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-auto-rows: 160px;
-  grid-auto-flow: dense; /* fill any gaps with smaller tiles */
+  grid-auto-flow: dense;
   gap: 8px;
   border-radius: var(--radius-lg);
   overflow: hidden;
-  background: var(--bg-soft);
-  padding: 8px;
+  background: linear-gradient(135deg, #0b1322 0%, #1a2540 50%, #0b1322 100%);
+  padding: 10px;
+  position: relative;
+}
+/* Subtle grid lines on the background to evoke a HUD */
+.mosaic-grid::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(64, 156, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(64, 156, 255, 0.04) 1px, transparent 1px);
+  background-size: 32px 32px;
+  pointer-events: none;
+  border-radius: var(--radius-lg);
 }
 .mosaic-tile {
   position: relative;
   overflow: hidden;
   border-radius: var(--radius);
-  background: var(--bg-muted);
+  background: #0a1020;
   cursor: pointer;
   transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
               box-shadow 0.35s,
@@ -1463,23 +1476,94 @@ section { padding: 80px 0; }
 }
 .mosaic-tile:hover {
   transform: scale(1.04);
-  box-shadow: 0 16px 40px rgba(0,0,0,0.18);
+  box-shadow: 0 16px 40px rgba(0,30,80,0.45),
+              0 0 0 2px rgba(64, 156, 255, 0.6),
+              0 0 28px rgba(64, 156, 255, 0.35);
   z-index: 5;
   transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
               box-shadow 0.35s,
               z-index 0s;
 }
+
+/* MEDIA — futuristic filter (cyan-shifted, slightly desaturated, contrast boost) */
 .mosaic-tile img,
 .mosaic-tile video {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
-  transition: transform 0.5s;
+  transition: filter 0.5s ease, transform 0.5s;
+  filter:
+    contrast(1.12)
+    saturate(0.55)
+    brightness(0.92)
+    hue-rotate(-12deg);
 }
+/* On hover, restore richer color (still slightly stylized) */
 .mosaic-tile:hover img,
 .mosaic-tile:hover video {
-  transform: scale(1.02);
+  transform: scale(1.03);
+  filter:
+    contrast(1.08)
+    saturate(1.05)
+    brightness(1.02)
+    hue-rotate(0deg);
+}
+
+/* Cyan tint overlay - the "future filter" */
+.mosaic-tile::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    /* subtle scanlines */
+    repeating-linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0) 0px,
+      rgba(0, 0, 0, 0) 2px,
+      rgba(0, 30, 60, 0.10) 3px,
+      rgba(0, 30, 60, 0.10) 3px
+    ),
+    /* cyan tint gradient */
+    linear-gradient(
+      135deg,
+      rgba(0, 130, 200, 0.18) 0%,
+      rgba(0, 60, 130, 0.10) 50%,
+      rgba(196, 30, 58, 0.08) 100%
+    );
+  mix-blend-mode: screen;
+  pointer-events: none;
+  z-index: 1;
+  transition: opacity 0.5s ease;
+  opacity: 1;
+}
+.mosaic-tile:hover::after {
+  opacity: 0.25;
+}
+
+/* Corner accent brackets - HUD style */
+.mosaic-tile::before {
+  content: '';
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 14px;
+  height: 14px;
+  border-top: 1.5px solid rgba(64, 156, 255, 0.55);
+  border-right: 1.5px solid rgba(64, 156, 255, 0.55);
+  z-index: 3;
+  transition: opacity 0.3s, border-color 0.3s;
+  opacity: 0.7;
+}
+.mosaic-tile:hover::before {
+  border-color: rgba(64, 156, 255, 1);
+  opacity: 1;
+}
+/* Hero gets a more prominent bracket */
+.mosaic-tile.tile-hero::before {
+  width: 20px;
+  height: 20px;
+  border-width: 2px;
 }
 
 /* Hero tile: 2x2 */
@@ -1493,29 +1577,26 @@ section { padding: 80px 0; }
   grid-column: span 2;
 }
 
-/* Robot tile - subtle red border to distinguish from photos */
+/* Robot tile - the live indicator dot needs to sit ABOVE the overlay */
 .mosaic-tile.tile-robot {
-  outline: 2px solid transparent;
-  outline-offset: -2px;
+  outline: 1px solid rgba(196, 30, 58, 0.4);
+  outline-offset: -1px;
   transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
               box-shadow 0.35s,
               outline-color 0.25s;
 }
+/* Robot tile - red corner bracket overrides default cyan one */
 .mosaic-tile.tile-robot::before {
-  /* tiny red dot indicating live/playing video */
-  content: '';
-  position: absolute;
-  top: 10px; left: 10px;
-  width: 7px; height: 7px;
-  background: var(--accent);
-  border-radius: 50%;
-  z-index: 2;
-  box-shadow: 0 0 0 2px rgba(255,255,255,0.85);
-  animation: tile-pulse 2s ease-in-out infinite;
+  border-color: rgba(196, 30, 58, 0.7);
+  width: 16px;
+  height: 16px;
 }
-@keyframes tile-pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.4; }
+.mosaic-tile.tile-robot:hover::before {
+  border-color: var(--accent);
+}
+.mosaic-tile.tile-robot {
+  outline: 1px solid rgba(196, 30, 58, 0.4);
+  outline-offset: -1px;
 }
 .mosaic-tile.tile-robot:hover {
   outline-color: var(--accent);
@@ -1527,14 +1608,16 @@ section { padding: 80px 0; }
   left: 8px;
   right: 8px;
   padding: 5px 10px;
-  background: rgba(0, 0, 0, 0.75);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  color: white;
-  font-size: 0.72rem;
+  background: rgba(8, 18, 36, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: rgba(190, 220, 255, 0.95);
+  font-family: var(--font-en);
+  font-size: 0.7rem;
   font-weight: 600;
-  letter-spacing: -0.005em;
-  border-radius: 4px;
+  letter-spacing: 0.02em;
+  border-radius: 3px;
+  border: 1px solid rgba(64, 156, 255, 0.25);
   opacity: 0;
   transform: translateY(4px);
   transition: opacity 0.25s, transform 0.25s;
@@ -1542,25 +1625,31 @@ section { padding: 80px 0; }
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  z-index: 4;
 }
 .mosaic-tile:hover .tile-label {
   opacity: 1;
   transform: translateY(0);
 }
 .mosaic-tile .tile-label.robot {
-  background: rgba(196, 30, 58, 0.92);
+  background: rgba(120, 18, 38, 0.92);
+  color: #ffe5ea;
+  border-color: rgba(196, 30, 58, 0.55);
+  box-shadow: 0 0 12px rgba(196, 30, 58, 0.25);
 }
 
 /* Hero label always visible */
 .mosaic-tile.tile-hero .tile-label {
   opacity: 1;
   transform: translateY(0);
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   padding: 8px 14px;
   bottom: 12px;
   left: 12px;
   right: auto;
   max-width: calc(100% - 24px);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
 /* Tablet
@@ -1636,8 +1725,8 @@ section { padding: 80px 0; }
     transform: translateY(0);
   }
   .mosaic-tile.tile-robot::before {
-    width: 6px; height: 6px;
-    top: 8px; left: 8px;
+    width: 12px; height: 12px;
+    top: 5px; right: 5px;
   }
 }
 
