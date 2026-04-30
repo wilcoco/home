@@ -1487,6 +1487,11 @@ section { padding: 80px 0; }
   grid-row: span 2;
 }
 
+/* Wide tile: 2x1 (for highlighted clips) */
+.mosaic-tile.tile-wide {
+  grid-column: span 2;
+}
+
 /* Robot tile - subtle red border to distinguish from photos */
 .mosaic-tile.tile-robot {
   outline: 2px solid transparent;
@@ -1573,6 +1578,19 @@ section { padding: 80px 0; }
    │6 │7 │8 │
    └──┴──┴──┘
 */
+/* Tablet
+   3 cols × 5 rows = 15 cells
+   hero 2x2 (4) + 2 wide 2x1 (4 since wide reverts to 1col on tablet=2 wide) ...
+   Simpler: on tablet, wide tiles become normal (1 col span)
+   hero 2x2 (4) + 10 normal (10) = 14 cells of 15 (3×5), 1 empty.
+   Actually use 3×5 with wide tiles spanning 2:
+   hero(4) + 2 wide × 2 cells (4) + 8 × 1 (8) = 16 cells → need 6 rows, 18 cells, 2 empty
+   
+   Cleanest: keep wide on tablet too. 3 col grid:
+   hero 2x2 (4) + 2 wide 2x1 (4) + 8 normal (8) = 16 cells in 3×6 = 18 cells, 2 empty.
+   Or strip wide on tablet:
+   hero 2x2 (4) + 10 normal (10) = 14 cells in 3×5 = 15 cells, 1 empty. acceptable.
+*/
 @media (max-width: 1024px) {
   .mosaic-grid {
     grid-template-columns: repeat(3, 1fr);
@@ -1582,11 +1600,15 @@ section { padding: 80px 0; }
     grid-column: span 2;
     grid-row: span 2;
   }
+  .mosaic-tile.tile-wide {
+    grid-column: span 1; /* revert to normal on tablet */
+  }
 }
 
 /* Mobile
-   2 cols, hero spans 2 cols (full width).
-   1 hero (1 row) + 8 tiles (4 rows) = 5 rows total.
+   2 cols. hero full width (2 cols, 1 row).
+   wide tiles stay 2 cols (full width).
+   hero (2 cells = 1 row) + 2 wide × 2 cells (= 2 rows) + 8 normal (= 4 rows) = 7 rows total
 */
 @media (max-width: 640px) {
   .mosaic-grid {
@@ -1599,6 +1621,9 @@ section { padding: 80px 0; }
     grid-column: span 2;
     grid-row: span 1;
     height: 200px;
+  }
+  .mosaic-tile.tile-wide {
+    grid-column: span 2; /* keep wide on mobile = full width emphasis */
   }
   .mosaic-tile.tile-hero .tile-label {
     font-size: 0.78rem;
