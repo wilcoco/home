@@ -208,9 +208,10 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .hero .container { position: relative; z-index: 1; }
 .hero-grid {
   display: grid;
-  grid-template-columns: 1.25fr 1fr;
+  grid-template-columns: 1.15fr 1fr;
   gap: 56px;
-  align-items: center;
+  align-items: start;
+  padding-top: 12px;
 }
 .hero-text h1 {
   font-size: clamp(1.8rem, 3.4vw, 2.8rem);
@@ -252,92 +253,141 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   50% { box-shadow: 0 0 0 6px rgba(196, 30, 58, 0.05); }
 }
 
-/* ========== MEGA SLOGAN HEADLINE ========== */
-.mega-slogan {
-  font-family: var(--font-en), serif;
-  font-weight: 800;
-  font-style: italic;
-  letter-spacing: -0.045em;
-  line-height: 0.92;
+/* ========== SLOGAN MEGA (with icons) ========== */
+.slogan-mega {
   margin: 0 0 28px;
-  color: var(--text);
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   position: relative;
-}
-.mega-slogan .line-1,
-.mega-slogan .line-2 {
-  font-size: clamp(2.8rem, 8vw, 6rem);
-  display: block;
-  position: relative;
-  text-rendering: optimizeLegibility;
-}
-.mega-slogan .line-1 {
-  color: var(--text);
-  position: relative;
-  padding-right: 0.15em;
-}
-.mega-slogan .line-1::after {
-  /* subtle dot decoration */
-  content: '.';
-  color: var(--accent);
-  position: absolute;
-}
-.mega-slogan .line-2 {
-  color: var(--accent);
-  position: relative;
-  padding-right: 0.18em;
-}
-.mega-slogan .line-2::after {
-  content: '.';
-  color: var(--text);
-  position: absolute;
+  font-family: 'Fraunces', 'Bricolage Grotesque', Georgia, serif;
 }
 
-/* The "to" connector — small, classy, italic serif feel */
-.mega-slogan .line-mid {
-  display: inline-flex;
+.slogan-line {
+  display: flex;
+  align-items: center;
+  gap: clamp(14px, 1.6vw, 26px);
+  position: relative;
+}
+
+.slogan-word {
+  font-size: clamp(2.6rem, 7.2vw, 5.4rem);
+  font-weight: 700;
+  font-style: italic;
+  letter-spacing: -0.035em;
+  line-height: 0.94;
+  font-feature-settings: 'ss01', 'ss02', 'lnum';
+  text-rendering: optimizeLegibility;
+  position: relative;
+}
+.slogan-word::after {
+  /* small dot end-mark */
+  content: '.';
+  color: var(--accent);
+  position: relative;
+  display: inline;
+  margin-left: -0.04em;
+}
+
+.slogan-line--from .slogan-word {
+  color: var(--text);
+}
+.slogan-line--to .slogan-word {
+  color: var(--accent);
+  background: linear-gradient(180deg, var(--accent) 0%, #9c1530 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.slogan-line--to .slogan-word::after {
+  color: var(--text);
+  -webkit-text-fill-color: var(--text);
+}
+
+/* Icons next to each word */
+.slogan-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: clamp(56px, 8vw, 90px);
+  height: clamp(56px, 8vw, 90px);
+  flex-shrink: 0;
+  border-radius: 14px;
+  padding: clamp(10px, 1.4vw, 16px);
+  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.slogan-icon svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.slogan-line--from .slogan-icon {
+  background: linear-gradient(135deg, #f5f6f8 0%, #e8eaee 100%);
+  color: var(--text);
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.06),
+              0 4px 14px rgba(0,0,0,0.06);
+}
+.slogan-line--to .slogan-icon {
+  background: linear-gradient(135deg, var(--accent) 0%, #9c1530 100%);
+  color: white;
+  box-shadow: 0 6px 20px rgba(196, 30, 58, 0.25),
+              inset 0 1px 0 rgba(255,255,255,0.2);
+}
+.slogan-line:hover .slogan-icon {
+  transform: rotate(-4deg) scale(1.05);
+}
+
+/* Connector — between the two lines, indented */
+.slogan-connector {
+  display: flex;
   align-items: center;
   gap: 14px;
-  margin: 0.04em 0 0.04em 0.08em;
-  font-style: normal;
-  width: 100%;
+  margin: clamp(8px, 1.2vw, 14px) 0 clamp(8px, 1.2vw, 14px) clamp(80px, 10vw, 116px);
+  color: var(--text-muted);
 }
-.mega-slogan .line-mid .connector {
-  font-family: 'Bricolage Grotesque', Georgia, serif;
+.connector-text {
+  font-family: 'Fraunces', Georgia, serif;
   font-style: italic;
   font-weight: 400;
-  font-size: clamp(1rem, 2vw, 1.6rem);
+  font-size: clamp(1.1rem, 1.8vw, 1.5rem);
   letter-spacing: 0.02em;
   color: var(--text-muted);
-  text-transform: lowercase;
-  padding: 0 14px;
-  position: relative;
-  flex-shrink: 0;
 }
-.mega-slogan .line-mid::before,
-.mega-slogan .line-mid::after {
-  content: '';
-  height: 1px;
-  background: var(--line-soft);
-  flex: 1;
-  max-width: 80px;
+.connector-arrow {
+  display: inline-flex;
+  align-items: center;
+  width: clamp(54px, 7vw, 78px);
+  height: 24px;
+  color: var(--accent);
 }
-.mega-slogan .line-mid::before { display: none; }
+.connector-arrow svg {
+  width: 100%;
+  height: 100%;
+}
+.connector-arrow svg circle {
+  animation: dot-flow 1.6s ease-in-out infinite;
+}
+.connector-arrow svg circle:nth-child(1) { animation-delay: 0s; }
+.connector-arrow svg circle:nth-child(2) { animation-delay: 0.15s; }
+.connector-arrow svg circle:nth-child(3) { animation-delay: 0.3s; }
+@keyframes dot-flow {
+  0%, 100% { opacity: 0.2; transform: translateX(0); }
+  50% { opacity: 1; transform: translateX(2px); }
+}
 
 /* Korean tagline beneath the slogan */
 .slogan-kr-tagline {
-  font-size: clamp(0.95rem, 1.4vw, 1.1rem);
+  font-size: clamp(0.92rem, 1.3vw, 1.05rem);
   font-weight: 500;
   color: var(--text-secondary);
-  margin: 0 0 32px;
+  margin: 4px 0 28px;
   letter-spacing: -0.005em;
   line-height: 1.5;
   display: flex;
   flex-wrap: wrap;
   gap: 6px 12px;
   align-items: center;
+  font-family: var(--font-kr, 'Pretendard'), sans-serif;
 }
 .slogan-kr-tagline .kr-piece {
   display: inline-flex;
@@ -360,10 +410,15 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 }
 
 @media (max-width: 768px) {
-  .mega-slogan { margin-bottom: 20px; }
-  .mega-slogan .line-mid { gap: 8px; }
-  .mega-slogan .line-mid::after { max-width: 50px; }
-  .slogan-kr-tagline { margin-bottom: 24px; }
+  .slogan-mega { margin-bottom: 20px; }
+  .slogan-connector {
+    margin-left: clamp(60px, 14vw, 80px);
+    gap: 10px;
+  }
+  .slogan-kr-tagline {
+    margin-bottom: 22px;
+    gap: 4px 8px;
+  }
   .slogan-kr-tagline .kr-piece + .kr-piece::before {
     margin-right: 4px;
   }
@@ -389,16 +444,21 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .hero-image, .hero-media {
   border-radius: var(--radius-lg);
   overflow: hidden;
-  box-shadow: var(--shadow);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.10), 0 4px 12px rgba(0,0,0,0.04);
   position: relative;
   background: var(--bg-soft);
+  margin-top: 80px; /* align roughly with slogan-mega first line */
+  transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.hero-image:hover {
+  transform: translateY(-4px);
 }
 .hero-image img,
 .hero-media img,
 .hero-media video {
   width: 100%;
   display: block;
-  aspect-ratio: 16 / 11;
+  aspect-ratio: 4 / 3;
   object-fit: cover;
 }
 .hero-media .hero-fallback {
@@ -2006,7 +2066,7 @@ section { padding: 80px 0; }
   .num-section-grid { grid-template-columns: 70px 1fr; gap: 20px; }
   .num-section-num { font-size: 2.2rem; }
   .hero-grid { grid-template-columns: 1fr; gap: 40px; }
-  .hero-image, .hero-media { order: -1; }
+  .hero-image, .hero-media { order: -1; margin-top: 0; }
 }
 
 @media (max-width: 768px) {
