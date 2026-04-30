@@ -188,15 +188,28 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 
 /* ========== HERO (home) ========== */
 .hero {
-  padding: 140px 0 80px;
+  padding: 150px 0 90px;
   position: relative;
   background: var(--bg-soft);
   border-bottom: 1px solid var(--line);
+  overflow: hidden;
 }
+.hero::before {
+  /* Watermark background pattern - subtle BUMPER text */
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-image:
+    radial-gradient(circle at 90% 10%, rgba(196, 30, 58, 0.06), transparent 35%),
+    radial-gradient(circle at 10% 90%, rgba(196, 30, 58, 0.04), transparent 40%);
+  pointer-events: none;
+  z-index: 0;
+}
+.hero .container { position: relative; z-index: 1; }
 .hero-grid {
   display: grid;
-  grid-template-columns: 1.1fr 1fr;
-  gap: 60px;
+  grid-template-columns: 1.25fr 1fr;
+  gap: 56px;
   align-items: center;
 }
 .hero-text h1 {
@@ -209,56 +222,151 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 }
 .hero-text h1 .accent { color: var(--accent); }
 
-/* BUMPER → BUFFER Slogan */
-.hero-slogan {
-  margin-bottom: 28px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.hero-slogan .slogan-en {
-  font-family: var(--font-en);
-  font-size: clamp(1.6rem, 3.6vw, 2.8rem);
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  color: var(--text);
-  line-height: 1;
+/* ========== HERO EYEBROW TAG ========== */
+.hero-eyebrow-tag {
   display: inline-flex;
   align-items: center;
-  gap: 0.18em;
-  flex-wrap: wrap;
-}
-.hero-slogan .slogan-arrow {
-  display: inline-block;
+  gap: 8px;
+  padding: 5px 12px;
+  background: var(--accent-dim);
+  border: 1px solid rgba(196, 30, 58, 0.2);
+  border-radius: 100px;
+  font-family: var(--font-en);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
   color: var(--accent);
-  font-weight: 700;
-  font-size: 0.85em;
-  line-height: 1;
-  transform: translateY(-0.04em);
-  margin: 0 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 24px;
+}
+.hero-eyebrow-tag::before {
+  content: '';
+  width: 6px; height: 6px;
+  background: var(--accent);
+  border-radius: 50%;
+  box-shadow: 0 0 0 3px rgba(196, 30, 58, 0.2);
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+@keyframes pulse-dot {
+  0%, 100% { box-shadow: 0 0 0 3px rgba(196, 30, 58, 0.2); }
+  50% { box-shadow: 0 0 0 6px rgba(196, 30, 58, 0.05); }
+}
+
+/* ========== MEGA SLOGAN HEADLINE ========== */
+.mega-slogan {
+  font-family: var(--font-en), serif;
+  font-weight: 800;
+  font-style: italic;
+  letter-spacing: -0.045em;
+  line-height: 0.92;
+  margin: 0 0 28px;
+  color: var(--text);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
   position: relative;
 }
-.hero-slogan .slogan-arrow::after {
-  content: '';
+.mega-slogan .line-1,
+.mega-slogan .line-2 {
+  font-size: clamp(2.8rem, 8vw, 6rem);
+  display: block;
+  position: relative;
+  text-rendering: optimizeLegibility;
+}
+.mega-slogan .line-1 {
+  color: var(--text);
+  position: relative;
+  padding-right: 0.15em;
+}
+.mega-slogan .line-1::after {
+  /* subtle dot decoration */
+  content: '.';
+  color: var(--accent);
   position: absolute;
-  left: 0;
-  bottom: -4px;
+}
+.mega-slogan .line-2 {
+  color: var(--accent);
+  position: relative;
+  padding-right: 0.18em;
+}
+.mega-slogan .line-2::after {
+  content: '.';
+  color: var(--text);
+  position: absolute;
+}
+
+/* The "to" connector — small, classy, italic serif feel */
+.mega-slogan .line-mid {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  margin: 0.04em 0 0.04em 0.08em;
+  font-style: normal;
   width: 100%;
-  height: 2px;
-  background: var(--accent);
-  border-radius: 1px;
-  opacity: 0.25;
 }
-.hero-slogan .slogan-kr {
-  font-size: clamp(1rem, 1.6vw, 1.25rem);
-  font-weight: 600;
+.mega-slogan .line-mid .connector {
+  font-family: 'Bricolage Grotesque', Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(1rem, 2vw, 1.6rem);
+  letter-spacing: 0.02em;
+  color: var(--text-muted);
+  text-transform: lowercase;
+  padding: 0 14px;
+  position: relative;
+  flex-shrink: 0;
+}
+.mega-slogan .line-mid::before,
+.mega-slogan .line-mid::after {
+  content: '';
+  height: 1px;
+  background: var(--line-soft);
+  flex: 1;
+  max-width: 80px;
+}
+.mega-slogan .line-mid::before { display: none; }
+
+/* Korean tagline beneath the slogan */
+.slogan-kr-tagline {
+  font-size: clamp(0.95rem, 1.4vw, 1.1rem);
+  font-weight: 500;
   color: var(--text-secondary);
-  letter-spacing: -0.01em;
-  line-height: 1.4;
+  margin: 0 0 32px;
+  letter-spacing: -0.005em;
+  line-height: 1.5;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+  align-items: center;
 }
-.hero-slogan .slogan-kr .accent {
+.slogan-kr-tagline .kr-piece {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.slogan-kr-tagline .kr-piece + .kr-piece::before {
+  content: '→';
   color: var(--accent);
   font-weight: 700;
+  margin-right: 8px;
+  font-family: var(--font-en);
+}
+.slogan-kr-tagline strong {
+  color: var(--text);
+  font-weight: 700;
+}
+.slogan-kr-tagline strong.accent {
+  color: var(--accent);
+}
+
+@media (max-width: 768px) {
+  .mega-slogan { margin-bottom: 20px; }
+  .mega-slogan .line-mid { gap: 8px; }
+  .mega-slogan .line-mid::after { max-width: 50px; }
+  .slogan-kr-tagline { margin-bottom: 24px; }
+  .slogan-kr-tagline .kr-piece + .kr-piece::before {
+    margin-right: 4px;
+  }
 }
 
 .hero-text .hero-lead {
