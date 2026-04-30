@@ -2240,25 +2240,42 @@ section { padding: 80px 0; }
   .container { padding: 0 18px; }
   .nav-links {
     position: fixed;
-    top: 76px; left: 0; right: 0;
-    bottom: 0;
+    top: 76px;
+    left: 0;
+    right: 0;
+    height: calc(100vh - 76px);
+    height: calc(100dvh - 76px);
     z-index: 99;
     flex-direction: column;
-    background: var(--bg);
-    padding: 20px;
+    background: #ffffff;
+    padding: 24px 24px 80px;
     gap: 0;
-    border-bottom: 1px solid var(--line);
-    transform: translateY(-120%);
+    border-top: 1px solid var(--line);
+    transform: translateY(-110%);
     transition: transform 0.35s ease;
-    box-shadow: var(--shadow-lg);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.12);
     overflow-y: auto;
     align-items: stretch;
+    -webkit-overflow-scrolling: touch;
   }
   .nav-links.active { transform: translateY(0); }
+  .nav-links > li {
+    width: 100%;
+    list-style: none;
+  }
   .nav-links > li > a {
-    padding: 14px 0;
+    display: block;
+    padding: 16px 4px;
     border-bottom: 1px solid var(--line);
-    font-size: 0.98rem;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #1a1d24;
+    text-decoration: none;
+    line-height: 1.4;
+  }
+  .nav-links > li > a:hover,
+  .nav-links > li > a:active {
+    color: var(--accent);
   }
   .nav-links li:last-child > a { border-bottom: none; }
   .has-submenu > a::after { display: none; }
@@ -2272,11 +2289,17 @@ section { padding: 80px 0; }
     border: none;
     padding: 0 0 8px 16px;
     margin: 0;
+    list-style: none;
   }
+  .submenu li { list-style: none; }
   .submenu a {
-    font-size: 0.9rem;
-    color: var(--text-muted);
-    padding: 8px 0 !important;
+    font-size: 0.95rem;
+    color: #5e6772 !important;
+    padding: 10px 4px !important;
+    display: block;
+    text-decoration: none;
+    border-bottom: none !important;
+    font-weight: 500;
   }
   .menu-toggle { display: flex; }
 
