@@ -1345,6 +1345,204 @@ section { padding: 80px 0; }
   font-family: var(--font-en);
 }
 
+/* ========== ROBOT MOSAIC ========== */
+.mosaic-section {
+  margin: 56px 0 24px;
+}
+.mosaic-header {
+  text-align: center;
+  margin-bottom: 28px;
+}
+.mosaic-header .section-tag {
+  display: inline-block;
+  margin-bottom: 12px;
+}
+.mosaic-title {
+  font-size: clamp(1.4rem, 2.4vw, 1.85rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  margin: 0 0 8px;
+}
+.mosaic-sub {
+  font-size: 0.92rem;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+/* Mosaic grid:
+   Desktop: 4 columns × 4 rows. Hero spans 2×2 top-left.
+   ┌───────┬───┬───┐
+   │       │ 2 │ 3 │
+   │   1   ├───┼───┤
+   │       │ 4 │ 5 │
+   ├───┬───┼───┼───┤
+   │ 6 │ 7 │ 8 │   │
+   └───┴───┴───┴───┘
+*/
+.mosaic-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: 160px;
+  gap: 8px;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--bg-soft);
+  padding: 8px;
+}
+.mosaic-tile {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius);
+  background: var(--bg-muted);
+  cursor: pointer;
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+              box-shadow 0.35s,
+              z-index 0s 0.35s;
+}
+.mosaic-tile:hover {
+  transform: scale(1.04);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.18);
+  z-index: 5;
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+              box-shadow 0.35s,
+              z-index 0s;
+}
+.mosaic-tile img,
+.mosaic-tile video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s;
+}
+.mosaic-tile:hover img,
+.mosaic-tile:hover video {
+  transform: scale(1.02);
+}
+
+/* Hero tile: 2x2 */
+.mosaic-tile.tile-hero {
+  grid-column: span 2;
+  grid-row: span 2;
+}
+
+/* Robot tile - subtle red border to distinguish from photos */
+.mosaic-tile.tile-robot {
+  outline: 2px solid transparent;
+  outline-offset: -2px;
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+              box-shadow 0.35s,
+              outline-color 0.25s;
+}
+.mosaic-tile.tile-robot::before {
+  /* tiny red dot indicating live/playing video */
+  content: '';
+  position: absolute;
+  top: 10px; left: 10px;
+  width: 7px; height: 7px;
+  background: var(--accent);
+  border-radius: 50%;
+  z-index: 2;
+  box-shadow: 0 0 0 2px rgba(255,255,255,0.85);
+  animation: tile-pulse 2s ease-in-out infinite;
+}
+@keyframes tile-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+.mosaic-tile.tile-robot:hover {
+  outline-color: var(--accent);
+}
+
+.mosaic-tile .tile-label {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  right: 8px;
+  padding: 5px 10px;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  color: white;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  border-radius: 4px;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.25s, transform 0.25s;
+  pointer-events: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.mosaic-tile:hover .tile-label {
+  opacity: 1;
+  transform: translateY(0);
+}
+.mosaic-tile .tile-label.robot {
+  background: rgba(196, 30, 58, 0.92);
+}
+
+/* Hero label always visible */
+.mosaic-tile.tile-hero .tile-label {
+  opacity: 1;
+  transform: translateY(0);
+  font-size: 0.85rem;
+  padding: 8px 14px;
+  bottom: 12px;
+  left: 12px;
+  right: auto;
+  max-width: calc(100% - 24px);
+}
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .mosaic-grid {
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: 140px;
+  }
+  .mosaic-tile.tile-hero {
+    grid-column: span 3;
+    grid-row: span 1;
+    height: 220px;
+  }
+  .mosaic-tile.tile-hero {
+    /* override to one row spanning all 3 cols */
+    grid-row: auto;
+  }
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+  .mosaic-grid {
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: 120px;
+    gap: 6px;
+    padding: 6px;
+  }
+  .mosaic-tile.tile-hero {
+    grid-column: span 2;
+    grid-row: span 1;
+    height: 180px;
+  }
+  .mosaic-tile.tile-hero .tile-label {
+    font-size: 0.78rem;
+    padding: 6px 10px;
+  }
+  .mosaic-tile .tile-label {
+    font-size: 0.66rem;
+    /* Always visible on mobile (no hover) */
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .mosaic-tile.tile-robot::before {
+    width: 6px; height: 6px;
+    top: 8px; left: 8px;
+  }
+}
+
 /* ========== VIDEO SECTION ========== */
 .video-section {
   padding: 80px 0;
