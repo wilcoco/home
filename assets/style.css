@@ -1047,18 +1047,81 @@ section { padding: 80px 0; }
 
 @media (max-width: 768px) {
   .data-table-grouped {
-    font-size: 0.74rem;
-    min-width: 680px;
+    font-size: 0.7rem;
+    min-width: 0;          /* let the table shrink to viewport */
+    width: 100%;
+    table-layout: fixed;   /* equal column distribution */
   }
   .data-table-grouped th,
   .data-table-grouped td {
-    padding: 7px 8px;
+    padding: 6px 4px;
+    word-break: keep-all;
+    overflow-wrap: break-word;
+    white-space: normal;   /* allow wrapping */
   }
   .data-table-grouped thead th {
+    font-size: 0.58rem;
+    white-space: normal;
+    line-height: 1.2;
+  }
+  .data-table-grouped .row-group {
+    width: auto;
+    font-size: 0.65rem;
+    padding: 4px 3px;
+    white-space: normal;
+  }
+  .data-table-grouped .row-subgroup {
+    width: auto;
+    font-size: 0.62rem;
+    padding: 4px 2px;
+    white-space: normal;
+  }
+  .data-table-grouped .num {
+    font-size: 0.66rem;
+  }
+
+  /* Regular .data-table also fits screen on mobile */
+  .data-table {
+    font-size: 0.78rem;
+    width: 100%;
+    table-layout: fixed;
+  }
+  .data-table th,
+  .data-table td {
+    padding: 8px 6px;
+    word-break: keep-all;
+    overflow-wrap: break-word;
+  }
+  .data-table thead th {
+    font-size: 0.65rem;
+  }
+
+  /* Hide horizontal scroll edge fade on mobile (no longer scrolling) */
+  .table-scroll::after { display: none; }
+}
+
+/* Very narrow phones - even smaller */
+@media (max-width: 380px) {
+  .data-table-grouped {
     font-size: 0.62rem;
   }
-  .data-table-grouped .row-group { width: 64px; font-size: 0.72rem; }
-  .data-table-grouped .row-subgroup { width: 48px; font-size: 0.7rem; }
+  .data-table-grouped th,
+  .data-table-grouped td {
+    padding: 4px 2px;
+  }
+  .data-table-grouped thead th {
+    font-size: 0.52rem;
+  }
+  .data-table-grouped .num {
+    font-size: 0.58rem;
+  }
+  .data-table {
+    font-size: 0.7rem;
+  }
+  .data-table th,
+  .data-table td {
+    padding: 6px 4px;
+  }
 }
 
 /* ========== INLINE ICON (paragraph float) ========== */
