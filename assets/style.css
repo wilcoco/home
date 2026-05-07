@@ -1681,10 +1681,24 @@ section { padding: 80px 0; }
   border-width: 2px;
 }
 
-/* Hero tile: 2x2 */
+/* Hero tile: 2x2 - if it contains brand guide, show fully */
 .mosaic-tile.tile-hero {
   grid-column: span 2;
   grid-row: span 2;
+}
+.mosaic-tile.tile-hero img {
+  object-fit: contain;
+  background: #ffffff;
+  padding: 8px;
+  /* Brand guide should keep its true colors - skip cyan filter */
+  filter: none !important;
+}
+.mosaic-tile.tile-hero::after {
+  /* Skip the cyan/scanline overlay on brand guide */
+  display: none;
+}
+.mosaic-tile.tile-hero:hover img {
+  filter: none !important;
 }
 
 /* Wide tile: 2x1 (for highlighted clips) */
