@@ -1048,43 +1048,39 @@ section { padding: 80px 0; }
 @media (max-width: 768px) {
   .data-table-grouped {
     font-size: 0.7rem;
-    min-width: 0;          /* let the table shrink to viewport */
-    width: 100%;
-    table-layout: fixed;   /* equal column distribution */
+    /* Keep min-width so 9-column grouped tables remain readable
+       and horizontally scroll inside .table-scroll instead of squashing */
+    min-width: 560px;
   }
   .data-table-grouped th,
   .data-table-grouped td {
-    padding: 6px 4px;
+    padding: 6px 5px;
     word-break: keep-all;
     overflow-wrap: break-word;
-    white-space: normal;   /* allow wrapping */
   }
   .data-table-grouped thead th {
-    font-size: 0.58rem;
-    white-space: normal;
+    font-size: 0.6rem;
     line-height: 1.2;
   }
   .data-table-grouped .row-group {
-    width: auto;
-    font-size: 0.65rem;
+    width: 56px;
+    font-size: 0.66rem;
     padding: 4px 3px;
-    white-space: normal;
   }
   .data-table-grouped .row-subgroup {
-    width: auto;
+    width: 44px;
     font-size: 0.62rem;
     padding: 4px 2px;
-    white-space: normal;
   }
   .data-table-grouped .num {
     font-size: 0.66rem;
   }
 
-  /* Regular .data-table also fits screen on mobile */
+  /* Regular .data-table - fits screen */
   .data-table {
     font-size: 0.78rem;
     width: 100%;
-    table-layout: fixed;
+    table-layout: auto;
   }
   .data-table th,
   .data-table td {
@@ -1093,27 +1089,28 @@ section { padding: 80px 0; }
     overflow-wrap: break-word;
   }
   .data-table thead th {
-    font-size: 0.65rem;
+    font-size: 0.68rem;
   }
 
-  /* Hide horizontal scroll edge fade on mobile (no longer scrolling) */
-  .table-scroll::after { display: none; }
+  /* Show scroll edge fade hint when content overflows */
+  .table-scroll::after { display: block; opacity: 1; }
 }
 
-/* Very narrow phones - even smaller */
+/* Very narrow phones - keep grouped tables scrollable, regular tables compact */
 @media (max-width: 380px) {
   .data-table-grouped {
     font-size: 0.62rem;
+    min-width: 520px;
   }
   .data-table-grouped th,
   .data-table-grouped td {
-    padding: 4px 2px;
+    padding: 4px 3px;
   }
   .data-table-grouped thead th {
-    font-size: 0.52rem;
+    font-size: 0.54rem;
   }
   .data-table-grouped .num {
-    font-size: 0.58rem;
+    font-size: 0.6rem;
   }
   .data-table {
     font-size: 0.7rem;
@@ -1283,7 +1280,9 @@ section { padding: 80px 0; }
 /* ========== DATA TABLES (FORMAL SPREADSHEET STYLE) ========== */
 .table-wrapper {
   margin: 28px 0;
+  width: 100%;
   max-width: 100%;
+  min-width: 0;
   background: var(--bg);
   border: 1px solid var(--line-soft);
   border-radius: var(--radius-lg);
@@ -1348,6 +1347,8 @@ section { padding: 80px 0; }
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   flex: 1;
+  max-width: 100%;
+  min-width: 0;
 }
 .data-table {
   width: 100%;
