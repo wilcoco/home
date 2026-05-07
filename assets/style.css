@@ -1520,342 +1520,105 @@ section { padding: 80px 0; }
   font-family: var(--font-en);
 }
 
-/* ========== ROBOT MOSAIC ========== */
+/* ========== MOSAIC GALLERY (clean 3x3) ========== */
 .mosaic-section {
-  margin: 56px 0 24px;
+  margin: 36px 0 24px;
 }
-.mosaic-header {
-  text-align: center;
-  margin-bottom: 28px;
-}
-.mosaic-header .section-tag {
-  display: inline-block;
-  margin-bottom: 12px;
-}
-.mosaic-title {
-  font-size: clamp(1.4rem, 2.4vw, 1.85rem);
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  color: var(--text);
-  margin: 0 0 8px;
-}
-.mosaic-sub {
-  font-size: 0.92rem;
-  color: var(--text-muted);
-  margin: 0;
-}
-
-/* Mosaic grid:
-   Desktop: 4 columns × 4 rows. Hero spans 2×2 top-left.
-   ┌───────┬───┬───┐
-   │       │ 2 │ 3 │
-   │   1   ├───┼───┤
-   │       │ 4 │ 5 │
-   ├───┬───┼───┼───┤
-   │ 6 │ 7 │ 8 │   │
-   └───┴───┴───┴───┘
-*/
 .mosaic-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-auto-rows: 160px;
-  grid-auto-flow: dense;
-  gap: 8px;
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  background: linear-gradient(135deg, #0b1322 0%, #1a2540 50%, #0b1322 100%);
-  padding: 10px;
-  position: relative;
-}
-/* Subtle grid lines on the background to evoke a HUD */
-.mosaic-grid::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(64, 156, 255, 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(64, 156, 255, 0.04) 1px, transparent 1px);
-  background-size: 32px 32px;
-  pointer-events: none;
-  border-radius: var(--radius-lg);
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
 }
 .mosaic-tile {
   position: relative;
   overflow: hidden;
-  border-radius: var(--radius);
-  background: #0a1020;
+  border-radius: 12px;
+  background: var(--bg-soft);
+  aspect-ratio: 4 / 3;
   cursor: pointer;
-  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
-              box-shadow 0.35s,
-              z-index 0s 0.35s;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.04);
+}
+.mosaic-tile a {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 .mosaic-tile:hover {
-  transform: scale(1.04);
-  box-shadow: 0 16px 40px rgba(0,30,80,0.45),
-              0 0 0 2px rgba(64, 156, 255, 0.6),
-              0 0 28px rgba(64, 156, 255, 0.35);
-  z-index: 5;
-  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
-              box-shadow 0.35s,
-              z-index 0s;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.06), 0 14px 28px rgba(0,0,0,0.08);
 }
-
-/* MEDIA — futuristic filter (cyan-shifted, slightly desaturated, contrast boost) */
 .mosaic-tile img,
 .mosaic-tile video {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
-  transition: filter 0.5s ease, transform 0.5s;
-  filter:
-    contrast(1.12)
-    saturate(0.55)
-    brightness(0.92)
-    hue-rotate(-12deg);
+  transition: transform 0.5s ease;
 }
-/* On hover, restore richer color (still slightly stylized) */
 .mosaic-tile:hover img,
 .mosaic-tile:hover video {
-  transform: scale(1.03);
-  filter:
-    contrast(1.08)
-    saturate(1.05)
-    brightness(1.02)
-    hue-rotate(0deg);
+  transform: scale(1.04);
 }
 
-/* Cyan tint overlay - the "future filter" */
-.mosaic-tile::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background:
-    /* subtle scanlines */
-    repeating-linear-gradient(
-      0deg,
-      rgba(0, 0, 0, 0) 0px,
-      rgba(0, 0, 0, 0) 2px,
-      rgba(0, 30, 60, 0.10) 3px,
-      rgba(0, 30, 60, 0.10) 3px
-    ),
-    /* cyan tint gradient */
-    linear-gradient(
-      135deg,
-      rgba(0, 130, 200, 0.18) 0%,
-      rgba(0, 60, 130, 0.10) 50%,
-      rgba(196, 30, 58, 0.08) 100%
-    );
-  mix-blend-mode: screen;
-  pointer-events: none;
-  z-index: 1;
-  transition: opacity 0.5s ease;
-  opacity: 1;
-}
-.mosaic-tile:hover::after {
-  opacity: 0.25;
-}
-
-/* Corner accent brackets - HUD style */
-.mosaic-tile::before {
-  content: '';
-  position: absolute;
-  top: 6px;
-  right: 6px;
-  width: 14px;
-  height: 14px;
-  border-top: 1.5px solid rgba(64, 156, 255, 0.55);
-  border-right: 1.5px solid rgba(64, 156, 255, 0.55);
-  z-index: 3;
-  transition: opacity 0.3s, border-color 0.3s;
-  opacity: 0.7;
-}
-.mosaic-tile:hover::before {
-  border-color: rgba(64, 156, 255, 1);
-  opacity: 1;
-}
-/* Hero gets a more prominent bracket */
-.mosaic-tile.tile-hero::before {
-  width: 20px;
-  height: 20px;
-  border-width: 2px;
-}
-
-/* Hero tile: 2x2 - if it contains brand guide, show fully */
-.mosaic-tile.tile-hero {
-  grid-column: span 2;
-  grid-row: span 2;
-}
-.mosaic-tile.tile-hero img {
+/* Brand guide tile - show fully (contain) instead of cover */
+.mosaic-tile.tile-photo:first-child img {
   object-fit: contain;
   background: #ffffff;
-  padding: 8px;
-  /* Brand guide should keep its true colors - skip cyan filter */
-  filter: none !important;
-}
-.mosaic-tile.tile-hero::after {
-  /* Skip the cyan/scanline overlay on brand guide */
-  display: none;
-}
-.mosaic-tile.tile-hero:hover img {
-  filter: none !important;
+  padding: 6px;
 }
 
-/* Wide tile: 2x1 (for highlighted clips) */
-.mosaic-tile.tile-wide {
-  grid-column: span 2;
-}
-
-/* Robot tile - the live indicator dot needs to sit ABOVE the overlay */
-.mosaic-tile.tile-robot {
-  outline: 1px solid rgba(196, 30, 58, 0.4);
-  outline-offset: -1px;
-  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
-              box-shadow 0.35s,
-              outline-color 0.25s;
-}
-/* Robot tile - red corner bracket overrides default cyan one */
-.mosaic-tile.tile-robot::before {
-  border-color: rgba(196, 30, 58, 0.7);
-  width: 16px;
-  height: 16px;
-}
-.mosaic-tile.tile-robot:hover::before {
-  border-color: var(--accent);
-}
-.mosaic-tile.tile-robot {
-  outline: 1px solid rgba(196, 30, 58, 0.4);
-  outline-offset: -1px;
-}
-.mosaic-tile.tile-robot:hover {
-  outline-color: var(--accent);
-}
-
+/* Subtle bottom-fade label, always visible but understated */
 .mosaic-tile .tile-label {
   position: absolute;
-  bottom: 8px;
-  left: 8px;
-  right: 8px;
-  padding: 5px 10px;
-  background: rgba(8, 18, 36, 0.85);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  color: rgba(190, 220, 255, 0.95);
-  font-family: var(--font-en);
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  border-radius: 3px;
-  border: 1px solid rgba(64, 156, 255, 0.25);
-  opacity: 0;
-  transform: translateY(4px);
-  transition: opacity 0.25s, transform 0.25s;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 28px 14px 10px;
+  background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 100%);
+  color: #ffffff;
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: -0.005em;
   pointer-events: none;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  z-index: 4;
+  opacity: 0;
+  transition: opacity 0.25s ease;
 }
 .mosaic-tile:hover .tile-label {
   opacity: 1;
-  transform: translateY(0);
-}
-.mosaic-tile .tile-label.robot {
-  background: rgba(120, 18, 38, 0.92);
-  color: #ffe5ea;
-  border-color: rgba(196, 30, 58, 0.55);
-  box-shadow: 0 0 12px rgba(196, 30, 58, 0.25);
 }
 
-/* Hero label always visible */
-.mosaic-tile.tile-hero .tile-label {
+/* Brand guide tile - white background needs dark label always visible */
+.mosaic-tile.tile-photo:first-child .tile-label {
+  background: linear-gradient(to top, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0) 100%);
+  color: var(--text);
   opacity: 1;
-  transform: translateY(0);
-  font-size: 0.82rem;
-  padding: 8px 14px;
-  bottom: 12px;
-  left: 12px;
-  right: auto;
-  max-width: calc(100% - 24px);
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
 }
 
-/* Tablet
-   3 cols × 4 rows = 12 cells
-   hero 2×2 = 4 cells
-   8 small × 1×1 = 8 cells
-   total: 12 cells, perfect fit
-   layout:
-   ┌──────┬──┐
-   │      │1 │
-   │ HERO ├──┤
-   │      │2 │
-   ├──┬──┬──┤
-   │3 │4 │5 │
-   ├──┼──┼──┤
-   │6 │7 │8 │
-   └──┴──┴──┘
-*/
-/* Tablet
-   3 cols × 5 rows = 15 cells
-   hero 2x2 (4) + 2 wide 2x1 (4 since wide reverts to 1col on tablet=2 wide) ...
-   Simpler: on tablet, wide tiles become normal (1 col span)
-   hero 2x2 (4) + 10 normal (10) = 14 cells of 15 (3×5), 1 empty.
-   Actually use 3×5 with wide tiles spanning 2:
-   hero(4) + 2 wide × 2 cells (4) + 8 × 1 (8) = 16 cells → need 6 rows, 18 cells, 2 empty
-   
-   Cleanest: keep wide on tablet too. 3 col grid:
-   hero 2x2 (4) + 2 wide 2x1 (4) + 8 normal (8) = 16 cells in 3×6 = 18 cells, 2 empty.
-   Or strip wide on tablet:
-   hero 2x2 (4) + 10 normal (10) = 14 cells in 3×5 = 15 cells, 1 empty. acceptable.
-*/
-@media (max-width: 1024px) {
+/* Tablet */
+@media (max-width: 900px) {
   .mosaic-grid {
     grid-template-columns: repeat(3, 1fr);
-    grid-auto-rows: 150px;
-  }
-  .mosaic-tile.tile-hero {
-    grid-column: span 2;
-    grid-row: span 2;
-  }
-  .mosaic-tile.tile-wide {
-    grid-column: span 1; /* revert to normal on tablet */
+    gap: 10px;
   }
 }
 
-/* Mobile
-   2 cols. hero full width (2 cols, 1 row).
-   wide tiles stay 2 cols (full width).
-   hero (2 cells = 1 row) + 2 wide × 2 cells (= 2 rows) + 8 normal (= 4 rows) = 7 rows total
-*/
-@media (max-width: 640px) {
+/* Mobile - 2 columns */
+@media (max-width: 600px) {
   .mosaic-grid {
     grid-template-columns: repeat(2, 1fr);
-    grid-auto-rows: 130px;
-    gap: 6px;
-    padding: 6px;
-  }
-  .mosaic-tile.tile-hero {
-    grid-column: span 2;
-    grid-row: span 1;
-    height: 200px;
-  }
-  .mosaic-tile.tile-wide {
-    grid-column: span 2; /* keep wide on mobile = full width emphasis */
-  }
-  .mosaic-tile.tile-hero .tile-label {
-    font-size: 0.78rem;
-    padding: 6px 10px;
+    gap: 8px;
   }
   .mosaic-tile .tile-label {
-    font-size: 0.66rem;
-    opacity: 1;
-    transform: translateY(0);
+    font-size: 0.68rem;
+    padding: 22px 10px 8px;
+    opacity: 1; /* always visible on mobile (no hover) */
   }
-  .mosaic-tile.tile-robot::before {
-    width: 12px; height: 12px;
-    top: 5px; right: 5px;
+}
+@media (max-width: 380px) {
+  .mosaic-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
   }
 }
 
