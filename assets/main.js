@@ -103,6 +103,8 @@ document.addEventListener('DOMContentLoaded', () => {
       // 서버가 응답하지 않아도 UI가 멈추지 않도록 25초 안전 타임아웃
       const ctrl = new AbortController();
       const timer = setTimeout(() => ctrl.abort(), 25000);
+      const t0 = Date.now();
+      console.log('[제보] 전송 시작', { type: payload.type, anonymous: payload.anonymous });
       try {
         const res = await fetch('/api/report', {
           method: 'POST',
@@ -110,8 +112,11 @@ document.addEventListener('DOMContentLoaded', () => {
           body: JSON.stringify(payload),
           signal: ctrl.signal,
         });
+        console.log(`[제보] 응답 수신: HTTP ${res.status} (${Date.now() - t0}ms)`);
         const data = await res.json().catch(() => ({}));
+        console.log('[제보] 응답 내용:', data);
         if (res.ok && data.ok) {
+          console.log('[제보] ✅ 성공');
           if (success) {
             success.classList.add('visible');
             setTimeout(() => success.classList.remove('visible'), 6000);
@@ -119,9 +124,11 @@ document.addEventListener('DOMContentLoaded', () => {
           ethicsForm.reset();
           applyAnonymous();
         } else {
+          console.warn('[제보] ⚠️ 서버가 실패 응답:', data);
           showError((data && data.error) || '제보 접수에 실패했습니다. 잠시 후 다시 시도해 주세요.');
         }
       } catch (err) {
+        console.error(`[제보] ❌ 요청 오류 (${Date.now() - t0}ms):`, err);
         if (err && err.name === 'AbortError') {
           showError('서버 응답이 지연되고 있습니다. 잠시 후 다시 시도하거나 관리자에게 문의해 주세요.');
         } else {

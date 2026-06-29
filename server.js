@@ -75,11 +75,14 @@ function escapeHtml(s) {
 app.use('/api', express.json({ limit: '64kb' }));
 
 app.post('/api/report', async (req, res) => {
+  const t0 = Date.now();
+  console.log(`[report] 📨 접수 요청 수신 (${req.ip})`);
   try {
     const body = req.body || {};
 
     // 허니팟(봇 차단): 보이지 않는 필드가 채워지면 무시
     if (body.website) {
+      console.log('[report] 허니팟 감지 — 무시');
       return res.json({ ok: true });
     }
 
@@ -156,11 +159,12 @@ app.post('/api/report', async (req, res) => {
       mailOptions.replyTo = email;
     }
 
+    console.log(`[report] ✉️  SMTP 발송 시도 → ${SMTP_HOST}:${SMTP_PORT} (수신:${REPORT_TO}, 유형:${typeLabel})`);
     const info = await tx.sendMail(mailOptions);
-    console.log(`[report] ✅ 발송 완료 → ${REPORT_TO} | 유형:${typeLabel} | ${anonymous ? '익명' : name} | id:${info.messageId}`);
+    console.log(`[report] ✅ 발송 완료 (${Date.now() - t0}ms) → ${REPORT_TO} | ${anonymous ? '익명' : name} | id:${info.messageId}`);
     return res.json({ ok: true });
   } catch (err) {
-    console.error('[report] 발송 실패:', {
+    console.error(`[report] ❌ 발송 실패 (${Date.now() - t0}ms):`, {
       message: err.message, code: err.code, command: err.command, response: err.response,
     });
     return res.status(500).json({ ok: false, error: '제보 접수 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.' });
