@@ -21,6 +21,11 @@ const SMTP_PORT = parseInt(process.env.SMTP_PORT || '587', 10);
 const SMTP_SECURE = String(process.env.SMTP_SECURE || 'false') === 'true';
 const SMTP_USER = process.env.SMTP_USER;
 const SMTP_PASS = process.env.SMTP_PASS;
+// 구형/자체 메일서버(XMail 등) 대응:
+//  - STARTTLS 미지원 서버면 SMTP_IGNORE_TLS=true 로 평문 전송
+//  - 자체서명 인증서면 기본적으로 검증을 완화(false), 필요 시 true 로 강제
+const SMTP_IGNORE_TLS = String(process.env.SMTP_IGNORE_TLS || 'false') === 'true';
+const SMTP_TLS_REJECT_UNAUTHORIZED = String(process.env.SMTP_TLS_REJECT_UNAUTHORIZED || 'false') === 'true';
 
 const REPORT_TYPES = {
   'unfair-trade': '거래업체 특혜 등 불공정한 업무처리',
@@ -43,7 +48,10 @@ function getTransporter() {
     host: SMTP_HOST,
     port: SMTP_PORT,
     secure: SMTP_SECURE,
+    ignoreTLS: SMTP_IGNORE_TLS,
+    requireTLS: false,
     auth: { user: SMTP_USER, pass: SMTP_PASS },
+    tls: { rejectUnauthorized: SMTP_TLS_REJECT_UNAUTHORIZED },
   });
   return transporter;
 }
