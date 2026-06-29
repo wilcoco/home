@@ -27,6 +27,8 @@ const SMTP_PASS = process.env.SMTP_PASS;
 //  - 자체서명 인증서면 기본적으로 검증을 완화(false), 필요 시 true 로 강제
 const SMTP_IGNORE_TLS = String(process.env.SMTP_IGNORE_TLS || 'false') === 'true';
 const SMTP_TLS_REJECT_UNAUTHORIZED = String(process.env.SMTP_TLS_REJECT_UNAUTHORIZED || 'false') === 'true';
+// 고정 출발지 IP 프록시 (예: socks5://user:pass@proxy-host:1080). 비우면 직접 연결.
+const SMTP_PROXY = process.env.SMTP_PROXY || '';
 
 const REPORT_TYPES = {
   'unfair-trade': '거래업체 특혜 등 불공정한 업무처리',
@@ -45,7 +47,7 @@ function getTransporter() {
   if (!SMTP_HOST || !SMTP_USER || !SMTP_PASS) {
     return null; // 미설정 시 null → 호출부에서 503 처리
   }
-  transporter = nodemailer.createTransport({
+  const opts = {
     host: SMTP_HOST,
     port: SMTP_PORT,
     secure: SMTP_SECURE,
@@ -57,7 +59,18 @@ function getTransporter() {
     connectionTimeout: 15000,
     greetingTimeout: 10000,
     socketTimeout: 20000,
-  });
+  };
+  // 고정 출발지 IP 우회: SMTP_PROXY(socks5://user:pass@host:port) 설정 시
+  // 모든 SMTP 연결을 해당 프록시(고정 IP)로 라우팅 → 메일서버 방화벽에 그 IP만 허용
+  if (SMTP_PROXY) {
+    opts.proxy = SMTP_PROXY;
+    console.log(`[smtp] 고정 IP 프록시 경유: ${SMTP_PROXY.replace(/\/\/[^@]*@/, '//***@')}`);
+  }
+  transporter = nodemailer.createTransport(opts);
+  if (SMTP_PROXY && SMTP_PROXY.startsWith('socks')) {
+    try { transporter.set('proxy_socks_module', require('socks')); }
+    catch (e) { console.error('[smtp] SOCKS 프록시를 쓰려면 `npm i socks` 가 필요합니다.'); }
+  }
   return transporter;
 }
 
