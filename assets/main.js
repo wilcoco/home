@@ -100,11 +100,15 @@ document.addEventListener('DOMContentLoaded', () => {
       };
 
       if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = '전송 중…'; }
+      // 서버가 응답하지 않아도 UI가 멈추지 않도록 25초 안전 타임아웃
+      const ctrl = new AbortController();
+      const timer = setTimeout(() => ctrl.abort(), 25000);
       try {
         const res = await fetch('/api/report', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload),
+          signal: ctrl.signal,
         });
         const data = await res.json().catch(() => ({}));
         if (res.ok && data.ok) {
@@ -118,8 +122,13 @@ document.addEventListener('DOMContentLoaded', () => {
           showError((data && data.error) || '제보 접수에 실패했습니다. 잠시 후 다시 시도해 주세요.');
         }
       } catch (err) {
-        showError('네트워크 오류로 제보를 접수하지 못했습니다. 잠시 후 다시 시도해 주세요.');
+        if (err && err.name === 'AbortError') {
+          showError('서버 응답이 지연되고 있습니다. 잠시 후 다시 시도하거나 관리자에게 문의해 주세요.');
+        } else {
+          showError('네트워크 오류로 제보를 접수하지 못했습니다. 잠시 후 다시 시도해 주세요.');
+        }
       } finally {
+        clearTimeout(timer);
         if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = '제보 접수'; }
       }
     });

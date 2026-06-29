@@ -53,6 +53,10 @@ function getTransporter() {
     requireTLS: false,
     auth: { user: SMTP_USER, pass: SMTP_PASS },
     tls: { rejectUnauthorized: SMTP_TLS_REJECT_UNAUTHORIZED },
+    // 메일서버에 접속 못 할 때 무한 대기 방지 (빠른 실패 → 폼에 오류 표시)
+    connectionTimeout: 15000,
+    greetingTimeout: 10000,
+    socketTimeout: 20000,
   });
   return transporter;
 }
