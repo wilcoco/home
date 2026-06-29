@@ -152,7 +152,8 @@ app.post('/api/report', async (req, res) => {
       mailOptions.replyTo = email;
     }
 
-    await tx.sendMail(mailOptions);
+    const info = await tx.sendMail(mailOptions);
+    console.log(`[report] ✅ 발송 완료 → ${REPORT_TO} | 유형:${typeLabel} | ${anonymous ? '익명' : name} | id:${info.messageId}`);
     return res.json({ ok: true });
   } catch (err) {
     console.error('[report] 발송 실패:', {
@@ -163,9 +164,11 @@ app.post('/api/report', async (req, res) => {
 });
 
 /* ---------- 정적 파일 서빙 (cleanUrls, trailingSlash=false) ---------- */
-// /assets 는 장기 캐시
+// /assets: 매번 변경 여부를 재확인(no-cache) → JS/CSS 수정이 즉시 반영
 app.use('/assets', express.static(path.join(ROOT, 'assets'), {
-  maxAge: '1d',
+  setHeaders: (res) => {
+    res.set('Cache-Control', 'no-cache');
+  },
 }));
 
 // cleanUrls: "/products" → "products.html"
