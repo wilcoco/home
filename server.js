@@ -4,6 +4,7 @@
    - 윤리경영 제보 접수 API (POST /api/report) → SMTP 메일 발송
    ============================================ */
 
+try { require('dotenv').config(); } catch (_) { /* dotenv 없으면 무시 (Railway는 환경변수 직접 주입) */ }
 const path = require('path');
 const fs = require('fs');
 const express = require('express');
@@ -154,7 +155,9 @@ app.post('/api/report', async (req, res) => {
     await tx.sendMail(mailOptions);
     return res.json({ ok: true });
   } catch (err) {
-    console.error('[report] 발송 실패:', err);
+    console.error('[report] 발송 실패:', {
+      message: err.message, code: err.code, command: err.command, response: err.response,
+    });
     return res.status(500).json({ ok: false, error: '제보 접수 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.' });
   }
 });
