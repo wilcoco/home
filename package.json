@@ -4,10 +4,16 @@
   "description": "㈜캠스 - Creative Automotive Module System website",
   "private": true,
   "scripts": {
-    "start": "npx --yes serve@14 . -l tcp://0.0.0.0:${PORT:-3000} --no-clipboard --config serve.json",
-    "dev": "npx --yes serve@14 . -l 3000 --no-clipboard --config serve.json"
+    "start": "node server.js",
+    "dev": "node server.js",
+    "smtp:test": "node smtp-test.js"
   },
   "engines": {
     "node": ">=18"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "nodemailer": "^6.9.14"
   }
 }
