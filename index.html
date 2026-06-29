@@ -252,6 +252,15 @@
           <li>기타 부정·비리 행위 및 윤리경영 위반사항</li>
         </ul>
 
+        <h3>신고 채널 운영 원칙</h3>
+        <ul>
+          <li><strong>신원 기밀 보장</strong> — 처리 전 과정에서 신고자의 신원을 기밀로 취급합니다.</li>
+          <li><strong>보복 금지</strong> — 제보·신고를 이유로 한 어떠한 보복·불이익 조치도 금지합니다.</li>
+          <li><strong>익명 접수</strong> — 신원 노출을 원치 않는 경우 익명으로 제보할 수 있습니다.</li>
+          <li><strong>이의 제기 절차</strong> — 처리 결과에 이의가 있는 경우 재검토를 요청할 수 있습니다.</li>
+          <li><strong>처리 절차 안내</strong> — 제보 → 접수 → 처리 → 통지의 단계로 진행됩니다.</li>
+        </ul>
+
         <h3>제보자 보호</h3>
         <p>
           캠스는 제보자의 신원을 철저히 보호하며, 제보·신고·진술·자료 제공 등으로 인한
@@ -265,14 +274,33 @@
         <h3>개인정보 수집 및 이용 안내</h3>
         <p>입력하신 정보는 제보사항 확인 및 처리 목적으로만 사용됩니다.</p>
         <ul>
-          <li>수집항목: 성명, 연락처, 이메일 주소</li>
+          <li>수집항목: 성명, 연락처, 이메일 주소 (익명 제보 시 미수집)</li>
           <li>수집목적: 제보에 따른 민원처리 및 결과 회신</li>
           <li>보유기간: 위 목적 달성 시까지</li>
         </ul>
       </div>
 
       <form class="ethics-form reveal" id="ethicsForm">
-        <div class="form-row">
+        <div class="form-group">
+          <label for="type">제보 유형</label>
+          <select id="type" name="type" required>
+            <option value="" disabled selected>유형을 선택해 주세요</option>
+            <option value="unfair-trade">거래업체 특혜 등 불공정한 업무처리</option>
+            <option value="bribery">부당한 요구 및 금전·향응 수수 행위</option>
+            <option value="info-leak">회사정보 및 인력 유출 행위</option>
+            <option value="subcontract">하도급법 위반 등 거래 관련 불공정 행위</option>
+            <option value="human-rights">인권침해 행위 (차별, 폭언, 괴롭힘 등)</option>
+            <option value="security">보안조치 관련 의견 및 불만</option>
+            <option value="etc">기타 부정·비리 및 윤리경영 위반사항</option>
+          </select>
+        </div>
+        <div class="form-group form-check">
+          <label class="check-label">
+            <input type="checkbox" id="anonymous" name="anonymous">
+            <span>익명으로 제보합니다 (성명·연락처·이메일을 입력하지 않습니다)</span>
+          </label>
+        </div>
+        <div class="form-row" id="identityFields">
           <div class="form-group">
             <label for="name">성명</label>
             <input type="text" id="name" name="name" required>
@@ -282,7 +310,7 @@
             <input type="tel" id="contact" name="contact">
           </div>
         </div>
-        <div class="form-group">
+        <div class="form-group" id="emailField">
           <label for="email">이메일</label>
           <input type="email" id="email" name="email" required>
         </div>
@@ -290,8 +318,11 @@
           <label for="message">제보 내용</label>
           <textarea id="message" name="message" required></textarea>
         </div>
-        <button type="submit" class="form-submit">Submit</button>
+        <!-- 봇 차단용 허니팟 (사용자에게 보이지 않음) -->
+        <input type="text" name="website" id="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0;">
+        <button type="submit" class="form-submit">제보 접수</button>
         <div class="form-success" id="formSuccess">제출이 완료되었습니다!</div>
+        <div class="form-error" id="formError"></div>
       </form>
     </div>
   </div>

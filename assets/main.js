@@ -50,16 +50,77 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-  // Ethics form submit
+  // Ethics form: anonymous toggle + AJAX submit
   const ethicsForm = document.getElementById('ethicsForm');
   if (ethicsForm) {
-    ethicsForm.addEventListener('submit', (e) => {
+    const anonymous = document.getElementById('anonymous');
+    const identityFields = document.getElementById('identityFields');
+    const emailField = document.getElementById('emailField');
+    const nameInput = document.getElementById('name');
+    const emailInput = document.getElementById('email');
+    const success = document.getElementById('formSuccess');
+    const errorBox = document.getElementById('formError');
+    const submitBtn = ethicsForm.querySelector('.form-submit');
+
+    // 익명 체크 시 신원 입력 영역 숨김 + required 해제
+    const applyAnonymous = () => {
+      const on = anonymous && anonymous.checked;
+      if (identityFields) identityFields.style.display = on ? 'none' : '';
+      if (emailField) emailField.style.display = on ? 'none' : '';
+      if (nameInput) nameInput.required = !on;
+      if (emailInput) emailInput.required = !on;
+    };
+    if (anonymous) {
+      anonymous.addEventListener('change', applyAnonymous);
+      applyAnonymous();
+    }
+
+    ethicsForm.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const success = document.getElementById('formSuccess');
-      if (success) {
-        success.classList.add('visible');
-        ethicsForm.reset();
-        setTimeout(() => success.classList.remove('visible'), 5000);
+      if (success) success.classList.remove('visible');
+      if (errorBox) errorBox.classList.remove('visible');
+
+      const payload = {
+        type: ethicsForm.type ? ethicsForm.type.value : '',
+        anonymous: anonymous ? anonymous.checked : false,
+        name: nameInput ? nameInput.value : '',
+        contact: ethicsForm.contact ? ethicsForm.contact.value : '',
+        email: emailInput ? emailInput.value : '',
+        message: ethicsForm.message ? ethicsForm.message.value : '',
+        website: ethicsForm.website ? ethicsForm.website.value : '',
+      };
+
+      const showError = (msg) => {
+        if (errorBox) {
+          errorBox.textContent = msg;
+          errorBox.classList.add('visible');
+        } else {
+          alert(msg);
+        }
+      };
+
+      if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = '전송 중…'; }
+      try {
+        const res = await fetch('/api/report', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (res.ok && data.ok) {
+          if (success) {
+            success.classList.add('visible');
+            setTimeout(() => success.classList.remove('visible'), 6000);
+          }
+          ethicsForm.reset();
+          applyAnonymous();
+        } else {
+          showError((data && data.error) || '제보 접수에 실패했습니다. 잠시 후 다시 시도해 주세요.');
+        }
+      } catch (err) {
+        showError('네트워크 오류로 제보를 접수하지 못했습니다. 잠시 후 다시 시도해 주세요.');
+      } finally {
+        if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = '제보 접수'; }
       }
     });
   }

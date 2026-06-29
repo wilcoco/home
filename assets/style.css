@@ -1947,6 +1947,36 @@ section { padding: 80px 0; }
   font-size: 0.72rem;
 }
 .form-success.visible { display: block; }
+.form-error {
+  display: none;
+  padding: 7px;
+  background: #fdecec;
+  border: 1px solid #e5484d;
+  border-radius: var(--radius);
+  color: #c5282d;
+  text-align: center;
+  margin-top: 8px;
+  font-weight: 500;
+  font-size: 0.72rem;
+}
+.form-error.visible { display: block; }
+.ethics-form .form-check { margin-bottom: 8px; }
+.ethics-form .check-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 0.78rem;
+  color: var(--text-muted, #555);
+  font-weight: 500;
+}
+.ethics-form .check-label input[type="checkbox"] {
+  width: auto;
+  margin: 0;
+  accent-color: var(--accent);
+  flex: 0 0 auto;
+}
+.ethics-form .form-submit:disabled { opacity: 0.6; cursor: not-allowed; }
 
 /* Generic form (used in shop login etc) - default size kept */
 .form-group { margin-bottom: 18px; }
