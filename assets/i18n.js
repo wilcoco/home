@@ -670,10 +670,16 @@
   function updateToggle(lang) {
     var btn = document.getElementById('langToggle');
     if (!btn) return;
-    var next = (lang === 'en') ? 'ko' : 'en';
-    btn.textContent = (next === 'en') ? 'EN' : '한국어';
-    btn.setAttribute('aria-label', (next === 'en') ? 'Switch to English' : '한국어로 보기');
-    btn.setAttribute('data-lang', lang);
+    btn.innerHTML =
+      '<span class="lang-opt" data-lang="ko">한국어</span>' +
+      '<span class="lang-opt" data-lang="en">English</span>';
+    var opts = btn.querySelectorAll('.lang-opt');
+    for (var i = 0; i < opts.length; i++) {
+      var on = opts[i].getAttribute('data-lang') === lang;
+      opts[i].classList.toggle('active', on);
+      opts[i].setAttribute('aria-pressed', on ? 'true' : 'false');
+    }
+    btn.setAttribute('aria-label', 'Language: ' + (lang === 'en' ? 'English' : '한국어'));
   }
 
   var current = (function () {
@@ -684,10 +690,15 @@
   apply(current);
 
   document.addEventListener('click', function (e) {
-    var btn = e.target && e.target.closest && e.target.closest('#langToggle');
+    if (!e.target || !e.target.closest) return;
+    var btn = e.target.closest('#langToggle');
     if (!btn) return;
     e.preventDefault();
-    current = (current === 'en') ? 'ko' : 'en';
+    var seg = e.target.closest('[data-lang]');
+    var target = seg ? seg.getAttribute('data-lang') : ((current === 'en') ? 'ko' : 'en');
+    if (target !== 'ko' && target !== 'en') return;
+    if (target === current) return;
+    current = target;
     save(current);
     apply(current);
   });

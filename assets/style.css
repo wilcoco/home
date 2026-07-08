@@ -207,32 +207,37 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .menu-toggle.active span:nth-child(2) { opacity: 0; }
 .menu-toggle.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
-/* Language toggle (KO / EN) */
+/* Language toggle (한국어 / English) — segmented pill */
 .lang-toggle {
   flex-shrink: 0;
-  min-width: 46px;
-  height: 34px;
-  padding: 0 12px;
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  background: transparent;
+  gap: 2px;
+  padding: 3px;
+  background: var(--bg-soft);
   border: 1px solid var(--line);
   border-radius: 999px;
-  color: var(--text-secondary);
-  font-family: var(--font-en, 'Pretendard'), sans-serif;
-  font-size: 0.8rem;
-  font-weight: 600;
-  letter-spacing: 0.02em;
   cursor: pointer;
-  transition: color 0.2s, border-color 0.2s, background 0.2s;
+  line-height: 1;
+  -webkit-tap-highlight-color: transparent;
+}
+.lang-toggle .lang-opt {
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-family: var(--font-en, 'Pretendard'), sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--text-secondary);
   white-space: nowrap;
+  transition: color 0.2s, background 0.2s;
 }
-.lang-toggle:hover {
-  color: var(--accent);
-  border-color: var(--accent);
-  background: var(--accent-dim);
+.lang-toggle .lang-opt:hover { color: var(--accent); }
+.lang-toggle .lang-opt.active {
+  background: var(--accent);
+  color: #ffffff;
 }
+.lang-toggle .lang-opt.active:hover { color: #ffffff; }
 
 /* ========== STRIP DIVIDER ========== */
 .strip-divider {
@@ -2400,7 +2405,8 @@ section { padding: 80px 0; }
   .logo-text small { display: none; }
   .logo img { width: 38px; height: 38px; flex-shrink: 0; }
   .brand-tagline { display: none; }
-  .lang-toggle { margin-left: auto; height: 32px; min-width: 42px; padding: 0 10px; font-size: 0.78rem; }
+  .lang-toggle { margin-left: auto; padding: 2px; }
+  .lang-toggle .lang-opt { padding: 5px 9px; font-size: 0.72rem; }
   .menu-toggle { flex-shrink: 0; margin-left: 6px; }
 }
 
