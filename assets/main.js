@@ -39,16 +39,28 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Reveal on scroll
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+  //
+  // .reveal 은 opacity:0 으로 시작하므로, 여기서 .visible 을 못 붙이면 본문이 통째로
+  // 빈 화면이 된다. 대외 공개 페이지라 아래 두 가지를 반드시 지킬 것:
+  //   1. threshold 는 0. 비율 기준(예: 0.1)을 쓰면 뷰포트보다 훨씬 긴 섹션은 교차 비율이
+  //      그 값에 영원히 도달하지 못한다. (환경 페이지의 '환경경영방침 이행' 섹션은
+  //      표·차트가 늘어 8,700px 가 되면서 최대 비율이 0.08 까지 떨어졌다.)
+  //   2. IntersectionObserver 를 못 쓰면 애니메이션을 포기하고 전부 드러낸다.
+  const revealTargets = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) {
+    revealTargets.forEach(el => el.classList.add('visible'));
+  } else {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0, rootMargin: '0px 0px -60px 0px' });
 
-  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    revealTargets.forEach(el => observer.observe(el));
+  }
 
   // Ethics form: anonymous toggle + AJAX submit
   const ethicsForm = document.getElementById('ethicsForm');

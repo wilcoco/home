@@ -930,6 +930,20 @@ section { padding: 80px 0; }
   /* Force horizontal scroll on narrow screens instead of squishing */
   min-width: 720px;
 }
+/* Tables with many year columns need more room before wrapping labels */
+/* 연도 열이 많은 표.
+   고정 폭(min-width: 1000px)만 주면 셀 내용이 그 안에 욱여넣어져 글자가 칸을 넘친다.
+   width: max-content 로 내용에 맞춰 늘어나게 하고, 좁으면 .table-scroll 이 가로 스크롤한다. */
+.data-table-grouped.data-table-wide {
+  width: max-content;
+  min-width: 100%;
+}
+/* 물질명("아세트알데히드", "총탄화수소 (THC)")이 두 줄로 접히지 않게 */
+.data-table-grouped.data-table-wide th:first-child,
+.data-table-grouped.data-table-wide td.label-col {
+  min-width: 150px;
+  white-space: nowrap;
+}
 .data-table-grouped th,
 .data-table-grouped td {
   padding: 9px 12px;
@@ -1017,6 +1031,36 @@ section { padding: 80px 0; }
 /* Universal up/down for any table */
 .data-table .num.up { color: #1a7f3c; font-weight: 700; }
 .data-table .num.down { color: #1971c2; font-weight: 700; }
+
+/* Semantic result colouring - green = target met, red = target exceeded.
+   Use these (not .up/.down) wherever the arrow direction and "good" disagree,
+   e.g. an emission figure going up is a bad outcome. */
+.data-table .num.good,
+.data-table-grouped .num.good { color: #1a7f3c; font-weight: 700; }
+.data-table .num.bad,
+.data-table-grouped .num.bad { color: #c92a2a; font-weight: 700; }
+.data-table .num.flat,
+.data-table-grouped .num.flat { color: var(--text-muted); font-weight: 600; }
+
+/* Small status pill used in the 비고 column of the emission tables */
+.data-table .status,
+.data-table-grouped .status {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.74rem;
+  font-weight: 600;
+  white-space: nowrap;
+  line-height: 1.5;
+}
+.data-table .status.met,
+.data-table-grouped .status.met { background: #e6f4ea; color: #1a7f3c; }
+.data-table .status.over,
+.data-table-grouped .status.over { background: #fdecec; color: #c92a2a; }
+.data-table .status.watch,
+.data-table-grouped .status.watch { background: #fff4e5; color: #b26a00; }
+.data-table .status.new,
+.data-table-grouped .status.new { background: #eef2f7; color: #40506b; }
 
 /* Visual hint that table is horizontally scrollable on narrow screens */
 .table-scroll {
